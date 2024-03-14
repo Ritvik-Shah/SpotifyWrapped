@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:gravity="center">
+    <!-- tools:context=".ui.update.UpdateLoginActivity" -->
+    <!--again ill use something like the line above after implementing the backend-->
+
+    <!-- Update Login Info Title -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="@string/update_login_info_title"
+        android:textColor="@color/design_default_color_primary_dark"
+        android:textSize="38sp"
+        android:textStyle="bold"
+        android:layout_marginTop="32dp" />
+
+    <!-- Current Password Input -->
+    <EditText
+        android:id="@+id/current_password"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/current_password"
+        android:autofillHints="password"
+        android:inputType="textPassword"
+        android:maxLines="1"
+        android:minHeight="48dp"
+        android:layout_marginTop="20dp"
+        android:padding="12dp" />
+
+    <!--new password -->
+    <EditText
+        android:id="@+id/new_password"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/new_password"
+        android:autofillHints="password"
+        android:inputType="textPassword"
+        android:maxLines="1"
+        android:minHeight="48dp"
+        android:layout_marginTop="10dp"
+        android:padding="12dp" />
+
+    <!--confirm new pass -->
+    <EditText
+        android:id="@+id/confirm_new_password"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/confirm_new_password"
+        android:autofillHints="password"
+        android:inputType="textPassword"
+        android:maxLines="1"
+        android:minHeight="48dp"
+        android:layout_marginTop="10dp"
+        android:padding="12dp" />
+
+    <!--Update Button-->
+    <Button
+        android:id="@+id/update_login_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/update_login"
+        android:backgroundTint="@color/purple_500"
+        android:layout_marginTop="20dp"
+        android:paddingTop="16dp"
+        android:paddingBottom="16dp" />
+
+</LinearLayout>

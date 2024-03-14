@@ -3,4 +3,14 @@
     <string name="title_home">Home</string>
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
+    <string name="username">Username</string>
+    <string name="login_password">Password</string>
+    <string name="login">Log In</string>
+    <string name="login_page_title">Login Page</string>
+    <string name="update_login_info_title">Update Login Info</string>
+    <string name="current_password">Current Password</string>
+    <string name="new_password">New Password</string>
+    <string name="confirm_new_password">Confirm New Password</string>
+    <string name="update_login">Update</string>
 </resources>
+
