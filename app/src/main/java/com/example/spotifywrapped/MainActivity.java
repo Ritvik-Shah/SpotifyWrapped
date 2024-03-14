@@ -11,7 +11,8 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import com.example.spotifywrapped.databinding.ActivityMainBinding;
-
+import android.widget.Button;
+import android.view.View;
 public class MainActivity extends AppCompatActivity {
 
     private ActivityMainBinding binding;
