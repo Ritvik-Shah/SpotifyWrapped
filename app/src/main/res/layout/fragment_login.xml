@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:paddingBottom="600dp"
+    android:gravity="center">
+    <!--tools:context=".ui.login.LoginActivity"> -->
+    <!--I saw the line above in the fragments_notifications.xml and i think its
+    connected to notifications fragment.java so i tried doing something similar
+    for login page but im assuming that i need to implement backend. stuff first.-->
+
+    <!--Title page (looks stupid rn but I'll change up the UI later)-->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="0dp"
+        android:paddingBottom="60dp"
+        android:text="@string/login_page_title"
+        android:textColor="@color/design_default_color_primary_dark"
+        android:textSize="48sp"
+        android:textStyle="bold" />
+
+    <!--username and password input below-->
+    <EditText
+        android:id="@+id/username"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:hint="@string/username"
+        android:autofillHints="username"
+        android:inputType="textEmailAddress"
+        android:maxLines="1"
+        android:minHeight="48dp"
+        android:padding="12dp" />
+
+    <!--login button for our main login page-->
+    <EditText
+        android:id="@+id/login_password"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:autofillHints="password"
+        android:hint="@string/login_password"
+        android:inputType="textPassword"
+        android:maxLines="1"
+        android:minHeight="48dp"
+        android:padding="12dp" />
+
+    <Button
+        android:id="@+id/login_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:backgroundTint="?attr/colorPrimary"
+        android:text="@string/login"
+        android:paddingBottom="16dp"
+        android:paddingTop="16dp"/>
+
+</LinearLayout>
