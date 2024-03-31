@@ -12,16 +12,11 @@ import androidx.lifecycle.ViewModelProvider;
 import android.widget.Button;
 
 import android.widget.Toast;
-import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
-import com.google.android.gms.tasks.OnCompleteListener;
+
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.WriteBatch;
 
@@ -51,12 +46,11 @@ public class DashboardFragment extends Fragment {
             public void onClick(View v) {
                 // Delete the user from firebase database
                 FirebaseFirestore db = FirebaseFirestore.getInstance();
-                String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
                 WriteBatch batch = db.batch();
 
                 // Delete user data from Firestore
-                batch.delete(db.collection("users").document(userId));
+                batch.delete();
 
                 // Delete user from Firebase Authentication
                 batch.update(db.collection("users").document(userId), "deleted", true);
