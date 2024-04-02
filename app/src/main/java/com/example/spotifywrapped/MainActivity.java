@@ -17,6 +17,9 @@ public class MainActivity extends AppCompatActivity {
     private ActivityMainBinding binding;
     public static final String REDIRECT_URI = "SPOTIFY-SDK://auth";
     private FirebaseFirestore db;
+
+    public static final String CLIENT_ID = "7e2ace9bc6e942d394cc8c9c71d0acd9";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
