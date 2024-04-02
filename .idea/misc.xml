@@ -1,4 +1,11 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+=======
+<<<<<<< HEAD
+=======
+>>>>>>> origin/main
 =======
 <?xml version="1.0" encoding="UTF-8"?>
 >>>>>>> origin/safiy
@@ -6,6 +13,10 @@
   <component name="ProjectRootManager" version="2" default="true">
     <output url="file://$PROJECT_DIR$/build/classes" />
   </component>
+<<<<<<< HEAD
+>>>>>>> 2117bffe9afce50d004ca975e0a62523d6456deb
+=======
+>>>>>>> origin/main
   <component name="ExternalStorageConfigurationManager" enabled="true" />
   <component name="ProjectRootManager" version="2" languageLevel="JDK_17" default="true" project-jdk-name="jbr-17" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />

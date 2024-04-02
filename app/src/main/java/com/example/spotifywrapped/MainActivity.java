@@ -10,11 +10,13 @@ import androidx.navigation.ui.NavigationUI;
 
 import com.example.spotifywrapped.databinding.ActivityMainBinding;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 public class MainActivity extends AppCompatActivity {
 
     private ActivityMainBinding binding;
     public static final String REDIRECT_URI = "SPOTIFY-SDK://auth";
+    private FirebaseFirestore db;
 
     public static final String CLIENT_ID = "7e2ace9bc6e942d394cc8c9c71d0acd9";
 
@@ -25,6 +27,7 @@ public class MainActivity extends AppCompatActivity {
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
+        db = FirebaseFirestore.getInstance();
         BottomNavigationView navView = findViewById(R.id.nav_view);
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
