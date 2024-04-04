@@ -10,10 +10,11 @@
 
     <!-- Update Login Info Title -->
     <TextView
+        android:id="@+id/update_login_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:text="@string/update_login_info_title"
+        android:text="@string/update_login_title"
         android:textColor="@color/design_default_color_primary_dark"
         android:textSize="38sp"
         android:textStyle="bold"
@@ -63,7 +64,7 @@
         android:id="@+id/update_login_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/update_login"
+        android:text="@string/update_login_button"
         android:backgroundTint="@color/purple_500"
         android:layout_marginTop="20dp"
         android:paddingTop="16dp"
