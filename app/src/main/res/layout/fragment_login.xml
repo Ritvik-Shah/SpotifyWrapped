@@ -15,6 +15,7 @@
 
     <!--Title page (looks stupid rn but I'll change up the UI later)-->
     <TextView
+        android:id="@+id/text_login"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
@@ -31,14 +32,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
-        android:hint="@string/username"
+        android:hint="@string/login_username"
         android:autofillHints="username"
         android:inputType="textEmailAddress"
         android:maxLines="1"
         android:minHeight="48dp"
         android:padding="12dp" />
 
-    <!--login button for our main login page-->
+
     <EditText
         android:id="@+id/login_password"
         android:layout_width="match_parent"
@@ -51,13 +52,14 @@
         android:minHeight="48dp"
         android:padding="12dp" />
 
+    <!--login button for our main login page-->
     <Button
         android:id="@+id/login_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
         android:backgroundTint="?attr/colorPrimary"
-        android:text="@string/login"
+        android:text="@string/login_button"
         android:paddingBottom="16dp"
         android:paddingTop="16dp"/>
 
