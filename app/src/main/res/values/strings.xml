@@ -17,5 +17,9 @@
     <string name="new_password">New Password</string>
     <string name="confirm_new_password">Confirm New Password</string>
     <string name="update_login_button">Confirm Updates</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="update_login_info_title">Update Login Info</string>
+    <string name="current_password">Current Password</string>
+    <string name="new_password">New Password</string>
 </resources>
-
