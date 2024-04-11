@@ -1,4 +1,4 @@
-package com.example.spotifywrapped;
+package com.example.spotifywrapped.ui.pastwrapped;
 
 import androidx.lifecycle.ViewModel;
 

@@ -1,4 +1,4 @@
-package com.example.spotifywrapped;
+package com.example.spotifywrapped.ui.pastwrapped;
 
 import androidx.lifecycle.ViewModelProvider;
 
@@ -11,6 +11,8 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.example.spotifywrapped.R;
 
 public class oldspotifywrapped extends Fragment {
 
