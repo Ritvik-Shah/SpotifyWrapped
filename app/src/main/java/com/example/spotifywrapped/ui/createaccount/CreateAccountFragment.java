@@ -2,6 +2,7 @@ package com.example.spotifywrapped.ui.createaccount;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,8 +28,17 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.spotify.sdk.android.auth.AuthorizationClient;
 import com.spotify.sdk.android.auth.AuthorizationRequest;
 import com.spotify.sdk.android.auth.AuthorizationResponse;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
+
+import okhttp3.Callback;
 import okhttp3.OkHttpClient;
 import okhttp3.Call;
+import okhttp3.Request;
+import okhttp3.Response;
 
 public class CreateAccountFragment extends Fragment{
     private FragmentCreateaccountBinding binding;
@@ -56,17 +66,13 @@ public class CreateAccountFragment extends Fragment{
         editTextEmail = binding.editTextEmail;
         editTextPassword = binding.editTextPassword;
         buttonCreateAccount = binding.buttonCreateAccount;
-        buttonCreateAccount.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                createAccount();
-            }
-        });
+        buttonLinkSpotify = binding.buttonLinkSpotify;
 
         buttonLinkSpotify.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 getAuthCode();
+                onGetUserProfileClicked();
             }
         });
 
@@ -157,6 +163,48 @@ public class CreateAccountFragment extends Fragment{
      */
     private Uri getRedirectUri() {
         return Uri.parse(REDIRECT_URI);
+    }
+
+
+    /**
+     * Get user profile
+     * This method will get the user profile using the token
+     */
+    public void onGetUserProfileClicked() {
+        if (mAccessToken == null) {
+            Toast.makeText(requireContext(), "You need to get an access token first!", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        // Create a request to get the user profile
+        final Request request = new Request.Builder()
+                .url("https://api.spotify.com/v1/me")
+                .addHeader("Authorization", "Bearer " + mAccessToken)
+                .build();
+
+        cancelCall();
+        mCall = mOkHttpClient.newCall(request);
+
+        mCall.enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                Log.d("HTTP", "Failed to fetch data: " + e);
+                Toast.makeText(requireContext(), "Failed to fetch data, watch Logcat for more details",
+                        Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                try {
+                    final JSONObject jsonObject = new JSONObject(response.body().string());
+                    //setTextAsync(jsonObject.toString(3), profileTextView);
+                } catch (JSONException e) {
+                    Log.d("JSON", "Failed to parse data: " + e);
+                    Toast.makeText(requireContext(), "Failed to parse data, watch Logcat for more details",
+                            Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
     }
 
     private void cancelCall() {
