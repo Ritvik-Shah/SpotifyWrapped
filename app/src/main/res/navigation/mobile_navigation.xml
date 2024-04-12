@@ -24,8 +24,8 @@
         tools:layout="@layout/fragment_notifications" />
 
     <fragment
-        android:id="@+id/navigation_login"
-        android:name="com.example.spotifywrapped.ui.login.LoginFragment"
+        android:id="@+id/navigation_createaccount"
+        android:name="com.example.spotifywrapped.ui.createaccount.CreateAccountFragment"
         android:label="@string/title_login"
-        tools:layout="@layout/fragment_notifications" />
+        tools:layout="@layout/fragment_createaccount" />
 </navigation>
