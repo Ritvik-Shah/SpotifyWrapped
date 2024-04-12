@@ -29,4 +29,10 @@
         android:label="@string/title_login"
         tools:layout="@layout/fragment_createaccount" />
 
+    <fragment
+        android:id="@+id/navigation_updatelogin"
+        android:name="com.example.spotifywrapped.ui.updatelogin.UpdateLoginFragment"
+        android:label="@string/title_updatelogin"
+        tools:layout="@layout/fragment_update_login" />
+
 </navigation>
