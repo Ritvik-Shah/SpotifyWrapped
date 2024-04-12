@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/login_container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
@@ -72,6 +73,15 @@
         android:layout_marginTop="20dp"
         android:backgroundTint="?attr/colorPrimary"
         android:text="@string/login_button"
+        android:paddingBottom="16dp"
+        android:paddingTop="16dp"/>
+    <Button
+        android:id="@+id/create_link_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:backgroundTint="?attr/colorPrimary"
+        android:text="@string/title_createaccount"
         android:paddingBottom="16dp"
         android:paddingTop="16dp"/>
 

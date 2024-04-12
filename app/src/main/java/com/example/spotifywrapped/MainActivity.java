@@ -1,6 +1,8 @@
 package com.example.spotifywrapped;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -10,6 +12,9 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import com.example.spotifywrapped.databinding.ActivityMainBinding;
+import com.example.spotifywrapped.databinding.FragmentLoginBinding;
+import com.example.spotifywrapped.databinding.FragmentUpdateLoginBinding;
+import com.example.spotifywrapped.ui.login.LoginFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -39,15 +44,23 @@ public class MainActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
         FirebaseApp.initializeApp(this);
         db = FirebaseFirestore.getInstance();
-        BottomNavigationView navView = findViewById(R.id.nav_view);
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.navigation_home, R.id.navigation_settings, R.id.navigation_login)
+                R.id.navigation_home, R.id.navigation_settings)
                 .build();
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_activity_main);
-        NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
-        NavigationUI.setupWithNavController(binding.navView, navController);
+
+        SharedPreferences sharedPref = this.getSharedPreferences(
+                getString(R.string.preference_file_key), Context.MODE_PRIVATE);
+        int defaultValue = 0;
+        int isLoggedIn = sharedPref.getInt("is_logged_in", defaultValue);
+        if (isLoggedIn == 0) {
+            navController.navigate(R.id.navigation_login);
+        } else {
+            NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
+            NavigationUI.setupWithNavController(binding.navView, navController);
+        }
     }
 
 
