@@ -8,17 +8,8 @@
 
     <item
         android:id="@+id/navigation_settings"
-        android:icon="@drawable/ic_dashboard_black_24dp"
+        android:icon="@drawable/baseline_app_settings_alt_24"
         android:title="@string/title_settings" />
 
-    <item
-        android:id="@+id/navigation_login"
-        android:icon="@drawable/ic_notifications_black_24dp"
-        android:title="@string/title_login" />
-
-    <item
-        android:id="@+id/navigation_createaccount"
-        android:icon="@drawable/ic_notifications_black_24dp"
-        android:title="@string/title_createaccount" />
 
 </menu>

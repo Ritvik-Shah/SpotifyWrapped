@@ -15,6 +15,10 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
+
+import com.example.spotifywrapped.R;
 import com.example.spotifywrapped.User;
 import com.example.spotifywrapped.MainActivity;
 import com.example.spotifywrapped.databinding.FragmentCreateaccountBinding;
@@ -174,6 +178,8 @@ public class CreateAccountFragment extends Fragment{
                 // after the data addition is successful
                 // we are displaying a success toast message.
                 Toast.makeText(requireContext(), "Account Created!", Toast.LENGTH_SHORT).show();
+                NavController navController = Navigation.findNavController(getActivity(), R.id.nav_host_fragment_activity_main);
+                navController.navigate(R.id.navigation_login);
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
