@@ -133,7 +133,7 @@ public class CreateAccountFragment extends Fragment{
     }
 
     private void createAccount() {
-        CollectionReference dbUsers = db.collection("Users");
+
         String email = editTextEmail.getText().toString();
         String username = editTextUsername.getText().toString();
         String password = editTextPassword.getText().toString();
@@ -157,6 +157,17 @@ public class CreateAccountFragment extends Fragment{
                     }
                 });
 
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        String userID = "test";
+        if (currentUser != null) {
+            userID = currentUser.getUid();
+            // Now you have the userID, you can use it as needed
+            Log.d("UserID", "User ID: " + userID);
+        } else {
+            // No user is signed in
+            Log.d("UserID", "No user signed in");
+        }
+        CollectionReference dbUsers = db.collection(userID);
         dbUsers.add(courses).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
             @Override
             public void onSuccess(DocumentReference documentReference) {
