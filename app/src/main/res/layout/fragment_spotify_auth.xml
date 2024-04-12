@@ -13,11 +13,11 @@
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/token_text_view"
+            android:id="@+id/code_text_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
-            tools:text="Token:" />
+            tools:text="Code:" />
 
         <Button
             android:id="@+id/auth_btn"
