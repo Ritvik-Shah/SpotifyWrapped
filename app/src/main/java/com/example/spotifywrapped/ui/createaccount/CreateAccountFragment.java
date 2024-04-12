@@ -63,6 +63,8 @@ public class CreateAccountFragment extends Fragment{
     public static final String CLIENT_ID = "7e2ace9bc6e942d394cc8c9c71d0acd9";
     public static final int AUTH_TOKEN_REQUEST_CODE = 0;
     public static final int AUTH_CODE_REQUEST_CODE = 1;
+
+    boolean authSuccess = false;
     private String apiKey;
     private int counter = 0;
     private FirebaseAuth mAuth;
@@ -141,8 +143,9 @@ public class CreateAccountFragment extends Fragment{
         String email = editTextEmail.getText().toString();
         String username = editTextUsername.getText().toString();
         String password = editTextPassword.getText().toString();
-        // adding our data to our courses object class.
-        User courses = new User(mAccessCode, email, username, password);
+
+        // adding our data to our user object class.
+        User user = new User(mAccessCode, email, username, password);
 
         // below method is use to add data to Firebase Firestore.
 
@@ -153,6 +156,7 @@ public class CreateAccountFragment extends Fragment{
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
                             FirebaseUser user = mAuth.getCurrentUser();
+                            authSuccess = true;
                         } else {
                             // If sign in fails, display a message to the user.
                             Toast.makeText(getActivity(), "Authentication failed.",
@@ -172,14 +176,17 @@ public class CreateAccountFragment extends Fragment{
             Log.d("UserID", "No user signed in");
         }
         CollectionReference dbUsers = db.collection(userID);
-        dbUsers.add(courses).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+        dbUsers.add(user).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
             @Override
             public void onSuccess(DocumentReference documentReference) {
                 // after the data addition is successful
                 // we are displaying a success toast message.
-                Toast.makeText(requireContext(), "Account Created!", Toast.LENGTH_SHORT).show();
-                NavController navController = Navigation.findNavController(getActivity(), R.id.nav_host_fragment_activity_main);
-                navController.navigate(R.id.navigation_login);
+
+                if (authSuccess == true){
+                    Toast.makeText(requireContext(), "Account Created!", Toast.LENGTH_SHORT).show();
+                    NavController navController = Navigation.findNavController(getActivity(), R.id.nav_host_fragment_activity_main);
+                    navController.navigate(R.id.navigation_login);
+                }
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override

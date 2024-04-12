@@ -63,30 +63,47 @@ public class LoginFragment extends Fragment {
             String password = editTextPassword.getText().toString();
             String email = editTextEmail.getText().toString();
 
-            mAuth.signInWithEmailAndPassword(email, password)
-                    .addOnCompleteListener(getActivity(), task -> {
-                        if (task.isSuccessful()) {
-                            // Sign in success, update UI with the signed-in user's information
-                            FirebaseUser user = mAuth.getCurrentUser();
-                            SharedPreferences sharedPref = context.getSharedPreferences(
-                                    getString(R.string.preference_file_key), Context.MODE_PRIVATE);
-                            SharedPreferences.Editor editor = sharedPref.edit();
-                            editor.putInt("is_logged_in", 1);
-                            editor.apply();
-                            Toast.makeText(getActivity(), "Authentication successful.",
-                                    Toast.LENGTH_SHORT).show();
-                            // Proceed to main activity or desired destination
-                            NavController navController = Navigation.findNavController(getActivity(), R.id.nav_host_fragment_activity_main);
-                            Activity activity = getActivity();
-                            activity.finish();
-                            activity.startActivity(activity.getIntent());
+            if(username.equals("")) {
+                Toast.makeText(getActivity(), "Authentication failed.",
+                        Toast.LENGTH_SHORT).show();
+            }
+            else if(email.equals("")) {
+                Toast.makeText(getActivity(), "Authentication failed.",
+                        Toast.LENGTH_SHORT).show();
+            }
+            else if(password.equals("")) {
+                Toast.makeText(getActivity(), "Authentication failed.",
+                        Toast.LENGTH_SHORT).show();
+            } else {
 
-                        } else {
-                            // If sign in fails, display a message to the user.
-                            Toast.makeText(getActivity(), "Authentication failed.",
-                                    Toast.LENGTH_SHORT).show();
-                        }
-                    });
+                mAuth.signInWithEmailAndPassword(email, password)
+                        .addOnCompleteListener(getActivity(), task -> {
+                            if (task.isSuccessful()) {
+                                // Sign in success, update UI with the signed-in user's information
+                                FirebaseUser user = mAuth.getCurrentUser();
+                                SharedPreferences sharedPref = context.getSharedPreferences(
+                                        getString(R.string.preference_file_key), Context.MODE_PRIVATE);
+                                SharedPreferences.Editor editor = sharedPref.edit();
+                                editor.putInt("is_logged_in", 1);
+                                editor.apply();
+                                Toast.makeText(getActivity(), "Authentication successful.",
+                                        Toast.LENGTH_SHORT).show();
+                                // Proceed to main activity or desired destination
+                                NavController navController = Navigation.findNavController(getActivity(), R.id.nav_host_fragment_activity_main);
+                                Activity activity = getActivity();
+                                activity.finish();
+                                activity.startActivity(activity.getIntent());
+
+                            } else {
+                                // If sign in fails, display a message to the user.
+                                Toast.makeText(getActivity(), "Authentication failed.",
+                                        Toast.LENGTH_SHORT).show();
+                            }
+
+
+                        });
+
+            }
 
 
 
