@@ -20,8 +20,13 @@ import com.example.spotifywrapped.MainActivity;
 import com.example.spotifywrapped.databinding.FragmentCreateaccountBinding;
 import com.example.spotifywrapped.databinding.FragmentDashboardBinding;
 import com.example.spotifywrapped.ui.dashboard.DashboardViewModel;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -56,6 +61,7 @@ public class CreateAccountFragment extends Fragment{
     public static final int AUTH_CODE_REQUEST_CODE = 1;
     private String apiKey;
     private int counter = 0;
+    private FirebaseAuth mAuth;
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         DashboardViewModel dashboardViewModel =
@@ -69,6 +75,7 @@ public class CreateAccountFragment extends Fragment{
         buttonCreateAccount = binding.buttonCreateAccount;
         buttonLinkSpotify = binding.buttonLinkSpotify;
         counter = 0;
+        mAuth = FirebaseAuth.getInstance();
 
         Button tokenBtn = (Button) binding.tokenBtn;
         Button codeBtn = (Button) binding.codeBtn;
@@ -126,12 +133,41 @@ public class CreateAccountFragment extends Fragment{
     }
 
     private void createAccount() {
-        CollectionReference dbUsers = db.collection("Users");
 
+        String email = editTextEmail.getText().toString();
+        String username = editTextUsername.getText().toString();
+        String password = editTextPassword.getText().toString();
         // adding our data to our courses object class.
-        User courses = new User(mAccessCode, editTextEmail.getText().toString(), editTextUsername.getText().toString(), editTextPassword.getText().toString());
+        User courses = new User(mAccessCode, email, username, password);
 
         // below method is use to add data to Firebase Firestore.
+
+        mAuth.createUserWithEmailAndPassword(email, password)
+                .addOnCompleteListener(getActivity(), new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            // Sign in success, update UI with the signed-in user's information
+                            FirebaseUser user = mAuth.getCurrentUser();
+                        } else {
+                            // If sign in fails, display a message to the user.
+                            Toast.makeText(getActivity(), "Authentication failed.",
+                                    Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        String userID = "test";
+        if (currentUser != null) {
+            userID = currentUser.getUid();
+            // Now you have the userID, you can use it as needed
+            Log.d("UserID", "User ID: " + userID);
+        } else {
+            // No user is signed in
+            Log.d("UserID", "No user signed in");
+        }
+        CollectionReference dbUsers = db.collection(userID);
         dbUsers.add(courses).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
             @Override
             public void onSuccess(DocumentReference documentReference) {

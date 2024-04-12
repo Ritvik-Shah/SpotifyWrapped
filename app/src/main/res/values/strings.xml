@@ -18,4 +18,9 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="update_login_info_title">Update Login Info</string>
+    <string name="current_password">Current Password</string>
+    <string name="new_password">New Password</string>
+    <string name="login_email">Email</string>
+    <string name="title_createaccount">Sign Up</string>
+    <string name="title_settings">Settings</string>
 </resources>
