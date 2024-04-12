@@ -26,6 +26,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -47,6 +50,7 @@ public class HomeFragment extends Fragment {
     //private String apiKey;
     //private int counter = 0;
     //private FirebaseAuth mAuth;
+    private List<String> myList;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -65,7 +69,17 @@ public class HomeFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 // Call getRecommendedArtists() method when the button is clicked
-                getRecommendedArtists();
+                myList = getRecommendedArtists();
+                if (myList.isEmpty()) {
+                    textView.setText("No recommended artists available");
+                }
+                else {
+                    Random random = new Random();
+                    int randomIndex = random.nextInt(myList.size());
+                    String randomArtist = myList.get(randomIndex);
+                    textView.setText(randomArtist);
+                }
+
             }
         });
         return root;
@@ -193,11 +207,14 @@ public class HomeFragment extends Fragment {
         return Uri.parse(REDIRECT_URI);
     }
 
-    private void getRecommendedArtists() {
+    private List<String> getRecommendedArtists() {
         // Make a request to the Spotify API to get recommendations for new artists
         // You can use the user's liked tracks to inform the recommendations
         // Construct the request URL and include any necessary parameters
-        String apiUrl = "https://api.spotify.com/v1/recommendations?seed_artists=ARTIST_ID1,ARTIST_ID2&limit=5"; // Modify as needed
+        String apiUrl = "https://api.spotify.com/v1/me/tracks";
+        List<String> artistIds = new ArrayList<>();
+        //String seed_artists= ARTIST_ID1,ARTIST_ID2;
+        //int limit= 5; // Modify as needed
         // Include the user's access token in the request header
         String accessToken = ((MainActivity) requireActivity()).getmAccessToken();
         Request request = new Request.Builder()
@@ -210,26 +227,39 @@ public class HomeFragment extends Fragment {
         mCall = mOkHttpClient.newCall(request);
         mCall.enqueue(new Callback() {
             @Override
-            public void onFailure(Call call, IOException e) {
+            public void onFailure(@NonNull Call call, IOException e) {
                 Log.d("HTTP", "Failed to fetch data: " + e);
                 // Handle failure
             }
 
             @Override
-            public void onResponse(Call call, Response response) throws IOException {
+            public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
                 try {
-                    // Parse the response and extract recommended artists
                     JSONObject jsonResponse = new JSONObject(response.body().string());
-                    JSONArray artists = jsonResponse.getJSONArray("artists");
-                    Toast.makeText(requireContext(), artists.toString(), Toast.LENGTH_SHORT).show();
-                    // Process the recommended artists and update UI
-                    // You can update UI elements here or pass the data to another method for display
+                    JSONArray items = jsonResponse.getJSONArray("items");
+
+                    // Extract artist IDs from the fetched tracks
+
+                    int size = items.length();
+                    if (items.length() > 10) {
+                        size = 10;
+                    }
+                    for (int i = 0; i < size; i++) {
+                        JSONObject track = items.getJSONObject(i).getJSONObject("track");
+                        JSONArray artists = track.getJSONArray("artists");
+                        for (int j = 0; j < artists.length(); j++) {
+                            String artistId = artists.getJSONObject(j).getString("id");
+                            artistIds.add(artistId);
+                        }
+                    }
+
                 } catch (JSONException e) {
                     Log.d("JSON", "Failed to parse data: " + e);
                     // Handle JSON parsing error
                 }
             }
         });
+        return artistIds;
     }
 
     private void cancelCall() {
