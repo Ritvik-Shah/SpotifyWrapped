@@ -68,6 +68,9 @@ public class HomeFragment extends Fragment {
         recommendedArtists.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                mAccessToken = ((MainActivity) requireActivity()).getmAccessToken();
+                mAccessCode = ((MainActivity) requireActivity()).getmAccessCode();
+                onGetUserProfileClicked();
                 // Call getRecommendedArtists() method when the button is clicked
                 myList = getRecommendedArtists();
                 if (myList.isEmpty()) {
@@ -229,7 +232,8 @@ public class HomeFragment extends Fragment {
             @Override
             public void onFailure(@NonNull Call call, IOException e) {
                 Log.d("HTTP", "Failed to fetch data: " + e);
-                // Handle failure
+                Toast.makeText(requireContext(), "Failed to fetch data, watch Logcat for more details",
+                        Toast.LENGTH_SHORT).show();
             }
 
             @Override
@@ -258,6 +262,7 @@ public class HomeFragment extends Fragment {
                     // Handle JSON parsing error
                 }
             }
+
         });
         return artistIds;
     }
