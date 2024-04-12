@@ -64,7 +64,8 @@ public class SettingsFragment extends Fragment {
         btnUpdateLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Handle updating login information
+                NavController navController = Navigation.findNavController(getActivity(), R.id.nav_host_fragment_activity_main);
+                navController.navigate(R.id.navigation_updatelogin);
             }
         });
 
