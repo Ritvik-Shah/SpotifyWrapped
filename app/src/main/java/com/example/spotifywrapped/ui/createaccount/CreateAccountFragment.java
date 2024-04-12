@@ -47,7 +47,7 @@ public class CreateAccountFragment extends Fragment{
     private String authCode;
     private Button buttonCreateAccount, buttonLinkSpotify;
     private boolean isSpotifyLinked = false;
-    public static final String REDIRECT_URI = "SPOTIFY-SDK://auth";
+    public static final String REDIRECT_URI = "spotify-sdk://auth";
     private final OkHttpClient mOkHttpClient = new OkHttpClient();
     private String mAccessToken, mAccessCode;
     private Call mCall;
@@ -55,6 +55,7 @@ public class CreateAccountFragment extends Fragment{
     public static final int AUTH_TOKEN_REQUEST_CODE = 0;
     public static final int AUTH_CODE_REQUEST_CODE = 1;
     private String apiKey;
+    private int counter = 0;
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         DashboardViewModel dashboardViewModel =
@@ -67,12 +68,45 @@ public class CreateAccountFragment extends Fragment{
         editTextPassword = binding.editTextPassword;
         buttonCreateAccount = binding.buttonCreateAccount;
         buttonLinkSpotify = binding.buttonLinkSpotify;
+        counter = 0;
 
+        Button tokenBtn = (Button) binding.tokenBtn;
+        Button codeBtn = (Button) binding.codeBtn;
+        Button profileBtn = (Button) binding.profileBtn;
+
+        // Set the click listeners for the buttons
+
+        tokenBtn.setOnClickListener((v) -> {
+            getToken();
+        });
+
+        codeBtn.setOnClickListener((v) -> {
+            getCode();
+        });
+
+        profileBtn.setOnClickListener((v) -> {
+            mAccessToken = ((MainActivity) requireActivity()).getmAccessToken();
+            mAccessCode = ((MainActivity) requireActivity()).getmAccessCode();
+            onGetUserProfileClicked();
+        });
         buttonLinkSpotify.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getAuthCode();
+                /*if (counter == 0) {
+                    getToken();
+                    counter++;
+                } else if (counter == 1) {
+                    getAuthCode();
+                    counter++;
+                } else {
+                    onGetUserProfileClicked();
+                    counter = 0;
+                }*/
+                Toast.makeText(requireContext(), mAccessToken, Toast.LENGTH_SHORT).show();
+                getToken();
+                getCode();
                 onGetUserProfileClicked();
+                isSpotifyLinked = true;
             }
         });
 
@@ -95,7 +129,7 @@ public class CreateAccountFragment extends Fragment{
         CollectionReference dbUsers = db.collection("Users");
 
         // adding our data to our courses object class.
-        User courses = new User(authCode, editTextEmail.toString(), editTextUsername.toString(), editTextPassword.toString());
+        User courses = new User(mAccessCode, editTextEmail.getText().toString(), editTextUsername.getText().toString(), editTextPassword.getText().toString());
 
         // below method is use to add data to Firebase Firestore.
         dbUsers.add(courses).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
@@ -115,56 +149,52 @@ public class CreateAccountFragment extends Fragment{
         });
     }
 
-    public void getAuthCode() {
 
-        final AuthorizationRequest request = getAuthenticationRequest(AuthorizationResponse.Type.CODE);
-        AuthorizationClient.openLoginActivity(getActivity(), AUTH_CODE_REQUEST_CODE, request);
-
+    /**
+     * Get token from Spotify
+     * This method will open the Spotify login activity and get the token
+     * What is token?
+     * https://developer.spotify.com/documentation/general/guides/authorization-guide/
+     */
+    public void getToken() {
+        final AuthorizationRequest request = getAuthenticationRequest(AuthorizationResponse.Type.TOKEN);
+        AuthorizationClient.openLoginActivity(getActivity(), AUTH_TOKEN_REQUEST_CODE, request);
+        if (getActivity() == null) {
+            Toast.makeText(requireContext(), "Authentication Failed", Toast.LENGTH_SHORT).show();
+        }
     }
 
+    /**
+     * Get code from Spotify
+     * This method will open the Spotify login activity and get the code
+     * What is code?
+     * https://developer.spotify.com/documentation/general/guides/authorization-guide/
+     */
+    public void getCode() {
+        final AuthorizationRequest request = getAuthenticationRequest(AuthorizationResponse.Type.CODE);
+        AuthorizationClient.openLoginActivity(getActivity(), AUTH_CODE_REQUEST_CODE, request);
+    }
+
+
+    /**
+     * When the app leaves this activity to momentarily get a token/code, this function
+     * fetches the result of that external activity to get the response from Spotify
+     */
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         final AuthorizationResponse response = AuthorizationClient.getResponse(resultCode, data);
 
         // Check which request code is present (if any)
-        if (AUTH_CODE_REQUEST_CODE == requestCode) {
+        if (AUTH_TOKEN_REQUEST_CODE == requestCode) {
+            mAccessToken = response.getAccessToken();
+            //setTextAsync(mAccessToken, tokenTextView);
+
+        } else if (AUTH_CODE_REQUEST_CODE == requestCode) {
             mAccessCode = response.getCode();
-            authCode = mAccessCode;
+            //setTextAsync(mAccessCode, codeTextView);
         }
     }
-
-    /**
-     * Get authentication request
-     *
-     * @param type the type of the request
-     * @return the authentication request
-     */
-    private AuthorizationRequest getAuthenticationRequest(AuthorizationResponse.Type type) {
-        return new AuthorizationRequest.Builder(CLIENT_ID, type, getRedirectUri().toString())
-                .setShowDialog(false)
-                .setScopes(new String[] { "user-read-email" }) // <--- Change the scope of your requested token here
-                .setCampaign("your-campaign-token")
-                .build();
-    }
-
-    /**
-     * Creates a UI thread to update a TextView in the background
-     * Reduces UI latency and makes the system perform more consistently
-     *
-     * @param text the text to set
-     * @param textView TextView object to update
-     */
-
-    /**
-     * Gets the redirect Uri for Spotify
-     *
-     * @return redirect Uri object
-     */
-    private Uri getRedirectUri() {
-        return Uri.parse(REDIRECT_URI);
-    }
-
 
     /**
      * Get user profile
@@ -207,9 +237,49 @@ public class CreateAccountFragment extends Fragment{
         });
     }
 
+    /**
+     * Creates a UI thread to update a TextView in the background
+     * Reduces UI latency and makes the system perform more consistently
+     *
+     * @param text the text to set
+     * @param textView TextView object to update
+     */
+    private void setTextAsync(final String text, TextView textView) {
+        getActivity().runOnUiThread(() -> textView.setText(text));
+    }
+
+    /**
+     * Get authentication request
+     *
+     * @param type the type of the request
+     * @return the authentication request
+     */
+    private AuthorizationRequest getAuthenticationRequest(AuthorizationResponse.Type type) {
+        return new AuthorizationRequest.Builder(CLIENT_ID, type, getRedirectUri().toString())
+                .setShowDialog(false)
+                .setScopes(new String[] { "user-read-email" }) // <--- Change the scope of your requested token here
+                .setCampaign("your-campaign-token")
+                .build();
+    }
+
+    /**
+     * Gets the redirect Uri for Spotify
+     *
+     * @return redirect Uri object
+     */
+    private Uri getRedirectUri() {
+        return Uri.parse(REDIRECT_URI);
+    }
+
     private void cancelCall() {
         if (mCall != null) {
             mCall.cancel();
         }
+    }
+
+    @Override
+    public void onDestroy() {
+        cancelCall();
+        super.onDestroy();
     }
 }
