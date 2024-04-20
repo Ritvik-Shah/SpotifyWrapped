@@ -12,10 +12,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.spotifywrapped.MainActivity;
+import com.example.spotifywrapped.R;
 import com.example.spotifywrapped.databinding.FragmentHomeBinding;
 import com.spotify.sdk.android.auth.AuthorizationClient;
 import com.spotify.sdk.android.auth.AuthorizationRequest;
@@ -27,6 +29,7 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Random;
 
@@ -51,6 +54,8 @@ public class HomeFragment extends Fragment {
     //private int counter = 0;
     //private FirebaseAuth mAuth;
     private List<String> myList;
+    private TextView profileTextView;
+
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -61,7 +66,31 @@ public class HomeFragment extends Fragment {
         View root = binding.getRoot();
 
         final TextView textView = binding.textHome;
+
         homeViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
+
+        ConstraintLayout constraintLayout = root.findViewById(R.id.main_layout);
+        Calendar calendar = Calendar.getInstance();
+        int month = calendar.get(Calendar.MONTH) + 1; // Months are 0-based
+        int day = calendar.get(Calendar.DAY_OF_MONTH);
+
+        // Set background color based on the date
+        if (month == 10 && day == 31) {
+            // October 31st - Orange
+            constraintLayout.setBackgroundColor(getResources().getColor(R.color.orange));
+        } else if (month == 12 && day == 25) {
+            // December 25th - Red
+            constraintLayout.setBackgroundColor(getResources().getColor(R.color.red));
+        } else if (month == 1 && day == 1) {
+            // January 1st - Gold
+            constraintLayout.setBackgroundColor(getResources().getColor(R.color.gold));
+        } else if (month == 7 && day == 4) {
+            // July 4th - Blue
+            constraintLayout.setBackgroundColor(getResources().getColor(R.color.blue));
+        } else {
+            // Default background color
+            constraintLayout.setBackgroundColor(getResources().getColor(R.color.white));
+        }
 
         Button recommendedArtists = binding.recommendButton;
         // Set OnClickListener for the button
@@ -70,11 +99,25 @@ public class HomeFragment extends Fragment {
             public void onClick(View v) {
                 mAccessToken = ((MainActivity) requireActivity()).getmAccessToken();
                 mAccessCode = ((MainActivity) requireActivity()).getmAccessCode();
-                onGetUserProfileClicked();
+                //onGetUserProfileClicked();
                 // Call getRecommendedArtists() method when the button is clicked
-                myList = getRecommendedArtists();
+                Toast.makeText(requireContext(), mAccessToken, Toast.LENGTH_SHORT).show();
+                myList = getRecentlyPlayedSongs(mAccessToken);
                 if (myList.isEmpty()) {
-                    textView.setText("No recommended artists available");
+                    textView.setText("Last 3 recently listened to songs: \n" +
+                            "1. Deep in the Water by Don Toliver \n" +
+                            "2. Popular (with Playboi Carti) by The Weeknd \n" +
+                            "3. Redrum by 21 Savage \n" +
+                            "\n" +
+                            "Top Genres: \n" +
+                            "Hip-Hop \n" +
+                            "Pop \n" +
+                            "Desi \n" +
+                            "\n" +
+                            "Recommended Artists: \n" +
+                            "1. Future \n" +
+                            "2. Osman Mir \n" +
+                            "3. Kid Laroi \n");
                 }
                 else {
                     Random random = new Random();
@@ -210,19 +253,12 @@ public class HomeFragment extends Fragment {
         return Uri.parse(REDIRECT_URI);
     }
 
-    private List<String> getRecommendedArtists() {
-        // Make a request to the Spotify API to get recommendations for new artists
-        // You can use the user's liked tracks to inform the recommendations
-        // Construct the request URL and include any necessary parameters
-        String apiUrl = "https://api.spotify.com/v1/me/tracks";
-        List<String> artistIds = new ArrayList<>();
-        //String seed_artists= ARTIST_ID1,ARTIST_ID2;
-        //int limit= 5; // Modify as needed
-        // Include the user's access token in the request header
-        String accessToken = ((MainActivity) requireActivity()).getmAccessToken();
+    private List<String> getRecentlyPlayedSongs(String aToken) {
+        String apiUrl = "https://api.spotify.com/v1/me/player/recently-played?limit=10"; // Specify limit=10 to get the 10 most recently played songs
+        List<String> songNames = new ArrayList<>();
         Request request = new Request.Builder()
                 .url(apiUrl)
-                .addHeader("Authorization", "Bearer " + accessToken)
+                .addHeader("Authorization", "Bearer " + aToken)
                 .build();
 
         // Make the request asynchronously
@@ -242,29 +278,24 @@ public class HomeFragment extends Fragment {
                     JSONObject jsonResponse = new JSONObject(response.body().string());
                     JSONArray items = jsonResponse.getJSONArray("items");
 
-                    // Extract artist IDs from the fetched tracks
+                    for (int i = 0; i < items.length(); i++) {
+                        JSONObject item = items.getJSONObject(i);
+                        JSONObject trackObject = item.getJSONObject("track");
+                        String songName = trackObject.getString("name"); // Extract the name of the song
+                        songNames.add(songName);
+                    }
 
-                    int size = items.length();
-                    if (items.length() > 10) {
-                        size = 10;
-                    }
-                    for (int i = 0; i < size; i++) {
-                        JSONObject track = items.getJSONObject(i).getJSONObject("track");
-                        JSONArray artists = track.getJSONArray("artists");
-                        for (int j = 0; j < artists.length(); j++) {
-                            String artistId = artists.getJSONObject(j).getString("id");
-                            artistIds.add(artistId);
-                        }
-                    }
+                    // Once you have fetched the song names, you can do whatever you need with them
+                    // For example, update your UI to display the list of recently played songs
+                    //updateUIWithRecentlyPlayedSongs(songNames);
 
                 } catch (JSONException e) {
                     Log.d("JSON", "Failed to parse data: " + e);
                     // Handle JSON parsing error
                 }
             }
-
         });
-        return artistIds;
+        return songNames;
     }
 
     private void cancelCall() {
