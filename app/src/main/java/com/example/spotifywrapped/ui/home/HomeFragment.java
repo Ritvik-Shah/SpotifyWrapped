@@ -45,7 +45,7 @@ public class HomeFragment extends Fragment {
                 "fjlkasdjf;laskjdf;laksjd;fljkasd;lfjka");
         homeViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
 
-        createNotificationChannel();
+        //createNotificationChannel();
         Window window = requireActivity().getWindow();
         ActionBar actionBar = ((AppCompatActivity) requireActivity()).getSupportActionBar();
         Calendar calendar = Calendar.getInstance();
@@ -56,7 +56,7 @@ public class HomeFragment extends Fragment {
 // Set background color based on the date
         if (month == 10 && day == 31) {
             // October 31st - Orange
-            sendNotification("Halloween Edition", "Check out the new colors for Halloween!!!");
+            //sendNotification("Halloween Edition", "Check out the new colors for Halloween!!!");
             window.setStatusBarColor(getResources().getColor(R.color.black));
             if (actionBar != null) {
                 actionBar.setBackgroundDrawable(new ColorDrawable(ContextCompat.getColor(requireContext(), R.color.orange)));
@@ -90,7 +90,7 @@ public class HomeFragment extends Fragment {
         return root;
     }
 
-    private void createNotificationChannel() {
+    /*private void createNotificationChannel() {
         CharSequence name = "Wrapped";
         String description = "Spotify Wrapped App Notifications";
         int importance = NotificationManager.IMPORTANCE_DEFAULT;
@@ -113,7 +113,7 @@ public class HomeFragment extends Fragment {
         // notificationId is a unique int for each notification that you must define
         int notificationId = 1;
         notificationManager.notify(notificationId, builder.build());
-    }
+    }*/
 
     @Override
     public void onDestroyView() {
