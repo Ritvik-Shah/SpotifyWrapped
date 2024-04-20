@@ -37,6 +37,12 @@ public class HomeFragment extends Fragment {
         View root = binding.getRoot();
 
         final TextView textView = binding.textHome;
+        textView.setText("This is the updated text for the HomeFragment.\n\n\n\n\n\n\n\n\n\n" +
+                "asdlfkj;lakjfdsaljfa;lkdjf;lakj;fl;asf\n" +
+                "kaslfdjl;kjsaf;lkasjd;fklja;sldjkf;\n" +
+                "sdkjflksdajflkjas;flkjas;lfkas;lkfjd\n" +
+                "kjfasd;lkjf;aslkjf;salkjf;alskjdf;lskajdv;lkj;lkajv;\n\n\n\n\n\n\n" +
+                "fjlkasdjf;laskjdf;laksjd;fljkasd;lfjka");
         homeViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
 
         createNotificationChannel();
