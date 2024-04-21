@@ -3,6 +3,7 @@ import android.app.ActionBar;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -119,10 +120,16 @@ public class CreateAccountFragment extends Fragment{
                     onGetUserProfileClicked();
                     counter = 0;
                 }*/
-                //Toast.makeText(requireContext(), mAccessToken, Toast.LENGTH_SHORT).show();
+
                 getToken();
                 /*getCode();
                 onGetUserProfileClicked();*/
+                SystemClock.sleep(1000);
+                mAccessToken = ((MainActivity) requireActivity()).getmAccessToken();
+                //mAccessCode = ((MainActivity) requireActivity()).getmAccessCode();
+
+                //Toast.makeText(requireContext(), mAccessToken, Toast.LENGTH_SHORT).show();
+
                 isSpotifyLinked = true;
             }
         });
@@ -131,6 +138,7 @@ public class CreateAccountFragment extends Fragment{
             @Override
             public void onClick(View v) {
                 if (isSpotifyLinked) {
+                    mAccessToken = ((MainActivity) requireActivity()).getmAccessToken();
                     createAccount();
                 } else {
                     Toast.makeText(requireContext(), "Please link your Spotify account first", Toast.LENGTH_SHORT).show();
@@ -239,7 +247,7 @@ public class CreateAccountFragment extends Fragment{
      * When the app leaves this activity to momentarily get a token/code, this function
      * fetches the result of that external activity to get the response from Spotify
      */
-    @Override
+    /*@Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         final AuthorizationResponse response = AuthorizationClient.getResponse(resultCode, data);
@@ -247,13 +255,15 @@ public class CreateAccountFragment extends Fragment{
         // Check which request code is present (if any)
         if (AUTH_TOKEN_REQUEST_CODE == requestCode) {
             mAccessToken = response.getAccessToken();
+            Toast.makeText(requireContext(), mAccessToken, Toast.LENGTH_LONG);
             //setTextAsync(mAccessToken, tokenTextView);
 
         } else if (AUTH_CODE_REQUEST_CODE == requestCode) {
             mAccessCode = response.getCode();
+            Toast.makeText(requireContext(), mAccessCode, Toast.LENGTH_LONG);
             //setTextAsync(mAccessCode, codeTextView);
         }
-    }
+    }*/
 
     /**
      * Get user profile
