@@ -116,9 +116,9 @@ public class CreateAccountFragment extends Fragment{
                     counter = 0;
                 }*/
                 Toast.makeText(requireContext(), mAccessToken, Toast.LENGTH_SHORT).show();
-                getToken();
+                /*getToken();
                 getCode();
-                onGetUserProfileClicked();
+                onGetUserProfileClicked();*/
                 isSpotifyLinked = true;
             }
         });
@@ -145,7 +145,7 @@ public class CreateAccountFragment extends Fragment{
         String password = editTextPassword.getText().toString();
 
         // adding our data to our user object class.
-        User user = new User(mAccessCode, email, username, password);
+        User user = new User(mAccessToken, email, username, password);
 
         // below method is use to add data to Firebase Firestore.
 
@@ -155,7 +155,7 @@ public class CreateAccountFragment extends Fragment{
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
-                            FirebaseUser user = mAuth.getCurrentUser();
+                            FirebaseUser currentUser = mAuth.getCurrentUser();
                             authSuccess = true;
                         } else {
                             // If sign in fails, display a message to the user.
@@ -175,8 +175,9 @@ public class CreateAccountFragment extends Fragment{
             // No user is signed in
             Log.d("UserID", "No user signed in");
         }
-        CollectionReference dbUsers = db.collection(userID);
-        dbUsers.add(user).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+        CollectionReference dbUsers = db.collection("Users");
+        dbUsers.document(currentUser.getUid()).set(user);
+        /* dbUsers.add(user).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
             @Override
             public void onSuccess(DocumentReference documentReference) {
                 // after the data addition is successful
@@ -195,7 +196,7 @@ public class CreateAccountFragment extends Fragment{
                 // displaying a toast message when data addition is failed.
                 Toast.makeText(requireContext(), "Authentication Failed", Toast.LENGTH_SHORT).show();
             }
-        });
+        }); */
     }
 
 
@@ -306,7 +307,7 @@ public class CreateAccountFragment extends Fragment{
     private AuthorizationRequest getAuthenticationRequest(AuthorizationResponse.Type type) {
         return new AuthorizationRequest.Builder(CLIENT_ID, type, getRedirectUri().toString())
                 .setShowDialog(false)
-                .setScopes(new String[] { "user-read-email" }) // <--- Change the scope of your requested token here
+                .setScopes(new String[] { "user-read-email", "user-top-read "}) // <--- Change the scope of your requested token here
                 .setCampaign("your-campaign-token")
                 .build();
     }
