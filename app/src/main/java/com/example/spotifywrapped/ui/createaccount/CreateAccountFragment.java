@@ -83,9 +83,9 @@ public class CreateAccountFragment extends Fragment{
         counter = 0;
         mAuth = FirebaseAuth.getInstance();
 
-        Button tokenBtn = (Button) binding.tokenBtn;
+        /*Button tokenBtn = (Button) binding.tokenBtn;
         Button codeBtn = (Button) binding.codeBtn;
-        Button profileBtn = (Button) binding.profileBtn;
+        Button profileBtn = (Button) binding.profileBtn;*/
 
         // Set the click listeners for the buttons
 
