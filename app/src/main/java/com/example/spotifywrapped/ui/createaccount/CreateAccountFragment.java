@@ -124,7 +124,7 @@ public class CreateAccountFragment extends Fragment{
                 getToken();
                 /*getCode();
                 onGetUserProfileClicked();*/
-                SystemClock.sleep(1000);
+                //SystemClock.sleep(1000);
                 mAccessToken = ((MainActivity) requireActivity()).getmAccessToken();
                 //mAccessCode = ((MainActivity) requireActivity()).getmAccessCode();
 
@@ -184,6 +184,8 @@ public class CreateAccountFragment extends Fragment{
             userID = currentUser.getUid();
             // Now you have the userID, you can use it as needed
             Log.d("UserID", "User ID: " + userID);
+            CollectionReference dbUsers = db.collection("Users");
+            dbUsers.document(currentUser.getUid()).set(user);
             NavController navController = Navigation.findNavController(getActivity(), R.id.nav_host_fragment_activity_main);
             navController.navigate(R.id.navigation_login);
         } else {
@@ -192,8 +194,7 @@ public class CreateAccountFragment extends Fragment{
             Toast.makeText(getActivity(), "No user signed in",
                     Toast.LENGTH_SHORT).show();
         }
-        CollectionReference dbUsers = db.collection("Users");
-        dbUsers.document(currentUser.getUid()).set(user);
+
         /* dbUsers.add(user).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
             @Override
             public void onSuccess(DocumentReference documentReference) {
@@ -247,7 +248,7 @@ public class CreateAccountFragment extends Fragment{
      * When the app leaves this activity to momentarily get a token/code, this function
      * fetches the result of that external activity to get the response from Spotify
      */
-    /*@Override
+    @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         final AuthorizationResponse response = AuthorizationClient.getResponse(resultCode, data);
@@ -263,7 +264,7 @@ public class CreateAccountFragment extends Fragment{
             Toast.makeText(requireContext(), mAccessCode, Toast.LENGTH_LONG);
             //setTextAsync(mAccessCode, codeTextView);
         }
-    }*/
+    }
 
     /**
      * Get user profile
