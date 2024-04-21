@@ -84,13 +84,13 @@ public class CreateAccountFragment extends Fragment{
         counter = 0;
         mAuth = FirebaseAuth.getInstance();
 
-        Button tokenBtn = (Button) binding.tokenBtn;
+        /*Button tokenBtn = (Button) binding.tokenBtn;
         Button codeBtn = (Button) binding.codeBtn;
-        Button profileBtn = (Button) binding.profileBtn;
+        Button profileBtn = (Button) binding.profileBtn;*/
 
         // Set the click listeners for the buttons
 
-        tokenBtn.setOnClickListener((v) -> {
+        /*tokenBtn.setOnClickListener((v) -> {
             getToken();
         });
 
@@ -105,6 +105,7 @@ public class CreateAccountFragment extends Fragment{
         });
 
 
+        });*/
         buttonLinkSpotify.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -118,9 +119,9 @@ public class CreateAccountFragment extends Fragment{
                     onGetUserProfileClicked();
                     counter = 0;
                 }*/
-                Toast.makeText(requireContext(), mAccessToken, Toast.LENGTH_SHORT).show();
-                /*getToken();
-                getCode();
+                //Toast.makeText(requireContext(), mAccessToken, Toast.LENGTH_SHORT).show();
+                getToken();
+                /*getCode();
                 onGetUserProfileClicked();*/
                 isSpotifyLinked = true;
             }
@@ -163,8 +164,8 @@ public class CreateAccountFragment extends Fragment{
                             authSuccess = true;
                         } else {
                             // If sign in fails, display a message to the user.
-                            Toast.makeText(getActivity(), "Authentication failed.",
-                                    Toast.LENGTH_SHORT).show();
+                            /*Toast.makeText(getActivity(), "Authentication failed.",
+                                    Toast.LENGTH_SHORT).show();*/
                         }
                     }
                 });
@@ -175,9 +176,13 @@ public class CreateAccountFragment extends Fragment{
             userID = currentUser.getUid();
             // Now you have the userID, you can use it as needed
             Log.d("UserID", "User ID: " + userID);
+            NavController navController = Navigation.findNavController(getActivity(), R.id.nav_host_fragment_activity_main);
+            navController.navigate(R.id.navigation_login);
         } else {
             // No user is signed in
             Log.d("UserID", "No user signed in");
+            Toast.makeText(getActivity(), "No user signed in",
+                    Toast.LENGTH_SHORT).show();
         }
         CollectionReference dbUsers = db.collection("Users");
         dbUsers.document(currentUser.getUid()).set(user);
