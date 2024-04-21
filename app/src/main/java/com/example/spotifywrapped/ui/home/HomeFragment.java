@@ -24,6 +24,7 @@ import com.example.spotifywrapped.MainActivity;
 import com.example.spotifywrapped.R;
 import com.example.spotifywrapped.User;
 import com.example.spotifywrapped.databinding.FragmentHomeBinding;
+import com.example.spotifywrapped.ui.CardAdapter;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -52,7 +53,13 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 
+import androidx.viewpager2.widget.ViewPager2;
+import java.util.Arrays;
+
 public class HomeFragment extends Fragment {
+
+    private ViewPager2 viewPager;
+    private CardAdapter adapter;
 
     private FragmentHomeBinding binding;
     private String authCode;
@@ -73,6 +80,8 @@ public class HomeFragment extends Fragment {
     private User user;
     private String artistId = new String();
     private List<JSONObject> artists = new ArrayList<>();
+
+    private List<String> cards = new ArrayList<>();
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         HomeViewModel homeViewModel =
@@ -84,6 +93,7 @@ public class HomeFragment extends Fragment {
         FirebaseAuth mAuth = FirebaseAuth.getInstance();
         profileTextView = binding.textHome;
         secondTextView = binding.secondTextView;
+        viewPager = binding.viewPager;
         FirebaseUser currentUser = mAuth.getCurrentUser();
 
         //homeViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
@@ -157,6 +167,11 @@ public class HomeFragment extends Fragment {
                 actionBar.setBackgroundDrawable(new ColorDrawable(ContextCompat.getColor(requireContext(), R.color.purple_700)));
             }
         }
+
+        adapter = new CardAdapter(cards);
+        viewPager.setAdapter(adapter);
+
+
 
         return root;
     }
@@ -267,7 +282,8 @@ public class HomeFragment extends Fragment {
 
                         // Update the UI with the top artists
                         getActivity().runOnUiThread(() -> {
-                            profileTextView.setText(topArtists.toString());
+                            //profileTextView.setText(topArtists.toString());
+                            adapter.addItem(topArtists.toString());
                         });
 
                         final Request relatedRequest = new Request.Builder()
@@ -295,7 +311,7 @@ public class HomeFragment extends Fragment {
                                         // Loop through the items and extract track names
                                         int count = Math.min(itemsArray.length(), 3);
                                         StringBuilder topTracks = new StringBuilder();
-                                        topTracks.append("\n\nRecommended Artists\n");
+                                        topTracks.append("Recommended Artists\n");
                                         for (int i = 0; i < count; i++) {
                                             JSONObject trackObject = itemsArray.getJSONObject(i);
                                             String trackName = trackObject.getString("name");
@@ -305,7 +321,8 @@ public class HomeFragment extends Fragment {
                                         // Update the UI with the top tracks
                                         getActivity().runOnUiThread(() -> {
                                             // Append the top tracks to the existing text
-                                            profileTextView.append(topTracks.toString());
+                                            //profileTextView.append(topTracks.toString());
+                                            adapter.addItem(topTracks.toString());
                                         });
                                     } else {
                                         Log.d("HTTP", "Failed to fetch related artists data: " + response.code());
@@ -355,7 +372,7 @@ public class HomeFragment extends Fragment {
                         // Loop through the items and extract track names
                         int count = Math.min(itemsArray.length(), 3);
                         StringBuilder topTracks = new StringBuilder();
-                        topTracks.append("\n\nTop Tracks\n");
+                        topTracks.append("Top Tracks\n");
                         for (int i = 0; i < count; i++) {
                             JSONObject trackObject = itemsArray.getJSONObject(i);
                             String trackName = trackObject.getString("name");
@@ -365,7 +382,8 @@ public class HomeFragment extends Fragment {
                         // Update the UI with the top tracks
                         getActivity().runOnUiThread(() -> {
                             // Append the top tracks to the existing text
-                            profileTextView.append(topTracks.toString());
+                            //profileTextView.append(topTracks.toString());
+                            adapter.addItem(topTracks.toString());
                         });
                     } else {
                         Log.d("HTTP", "Failed to fetch tracks data: " + response.code());

@@ -15,7 +15,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:text="@string/update_login_title"
-        android:textColor="@color/design_default_color_primary_dark"
+        android:textColor="@color/colorPrimary"
         android:textSize="38sp"
         android:textStyle="bold"
         android:layout_marginTop="32dp" />

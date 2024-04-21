@@ -1,5 +1,6 @@
 package com.example.spotifywrapped.ui.updatelogin;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -36,7 +37,7 @@ public class UpdateLoginFragment extends Fragment {
 
         Context context = getActivity();
         BottomNavigationView navBar = getActivity().findViewById(R.id.nav_view);
-        navBar.setVisibility(View.GONE);
+        //navBar.setVisibility(View.GONE);
         binding = FragmentUpdateLoginBinding.inflate(inflater, container, false);
         editTextNewEmail = binding.newEmail;
         editTextNewPassword = binding.newPassword;
@@ -116,6 +117,7 @@ public class UpdateLoginFragment extends Fragment {
                         Toast.LENGTH_SHORT).show();
             }
         });
+
         View root = binding.getRoot();
         return root;
     }

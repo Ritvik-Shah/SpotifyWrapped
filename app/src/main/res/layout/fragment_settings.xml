@@ -16,11 +16,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Enable Dark Mode" />
-
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="10dp"
         android:text="Notification Preferences"
         android:textAppearance="@style/TextAppearance.AppCompat.Large" />
 

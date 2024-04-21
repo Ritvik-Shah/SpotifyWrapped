@@ -1,4 +1,5 @@
 package com.example.spotifywrapped.ui.createaccount;
+import android.app.ActionBar;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -101,6 +102,9 @@ public class CreateAccountFragment extends Fragment{
             mAccessToken = ((MainActivity) requireActivity()).getmAccessToken();
             mAccessCode = ((MainActivity) requireActivity()).getmAccessCode();
             onGetUserProfileClicked();
+        });
+
+
         });*/
         buttonLinkSpotify.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -133,6 +137,7 @@ public class CreateAccountFragment extends Fragment{
                 }
             }
         });
+
 
         View root = binding.getRoot();
         return root;
