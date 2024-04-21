@@ -34,7 +34,6 @@ public class HomeFragment extends Fragment {
         final TextView textView = binding.textHome;
         homeViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
 
-        //createNotificationChannel();
         Window window = requireActivity().getWindow();
         ActionBar actionBar = ((AppCompatActivity) requireActivity()).getSupportActionBar();
         Calendar calendar = Calendar.getInstance();
