@@ -23,7 +23,7 @@
         android:layout_marginTop="0dp"
         android:paddingBottom="60dp"
         android:text="@string/login_page_title"
-        android:textColor="@color/design_default_color_primary_dark"
+        android:textColor="@color/colorPrimaryDark"
         android:textSize="48sp"
         android:textStyle="bold" />
 

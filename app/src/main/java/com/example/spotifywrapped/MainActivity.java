@@ -1,9 +1,12 @@
 package com.example.spotifywrapped;
 
+import static androidx.navigation.Navigation.findNavController;
+
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.MenuItem;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.navigation.NavController;
@@ -36,6 +39,25 @@ public class MainActivity extends AppCompatActivity {
     private Call mCall;
     public static final int AUTH_TOKEN_REQUEST_CODE = 0;
     public static final int AUTH_CODE_REQUEST_CODE = 1;
+
+    public void onBackPressed() {
+        NavController navController = findNavController(this, R.id.nav_host_fragment_activity_main);
+
+        SharedPreferences sharedPref = this.getSharedPreferences(
+                getString(R.string.preference_file_key), Context.MODE_PRIVATE);
+        int defaultValue = 0;
+        int isLoggedIn = sharedPref.getInt("is_logged_in", defaultValue);
+        if (isLoggedIn == 0) {
+
+            navController.navigate(R.id.navigation_login);
+        } else {
+            if (!findNavController(this, R.id.nav_host_fragment_activity_main).popBackStack()) {
+                super.onBackPressed();  // If no more fragments to pop, finish the activity.
+            }
+        }
+
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,22 +67,32 @@ public class MainActivity extends AppCompatActivity {
         FirebaseApp.initializeApp(this);
         db = FirebaseFirestore.getInstance();
         // Passing each menu ID as a set of Ids because each
-        // menu should be considered as top level destinations.
+        // menu should be  as top level destinations.
         AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
                 R.id.navigation_home, R.id.navigation_settings)
                 .build();
-        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_activity_main);
+        NavController navController = findNavController(this, R.id.nav_host_fragment_activity_main);
 
         SharedPreferences sharedPref = this.getSharedPreferences(
                 getString(R.string.preference_file_key), Context.MODE_PRIVATE);
         int defaultValue = 0;
         int isLoggedIn = sharedPref.getInt("is_logged_in", defaultValue);
         if (isLoggedIn == 0) {
+            NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
+            NavigationUI.setupWithNavController(binding.navView, navController);
             navController.navigate(R.id.navigation_login);
         } else {
             NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
             NavigationUI.setupWithNavController(binding.navView, navController);
         }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            onBackPressed();
+        }
+        return super.onOptionsItemSelected(item);
     }
 
 
