@@ -168,7 +168,14 @@ public class CreateAccountFragment extends Fragment{
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
-                            FirebaseUser currentUser = mAuth.getCurrentUser();
+                            FirebaseUser currentUser = task.getResult().getUser();
+                            String userID = currentUser.getUid();
+                            // Now you have the userID, you can use it as needed
+                            Log.d("UserID", "User ID: " + userID);
+                            CollectionReference dbUsers = db.collection("Users");
+                            dbUsers.document(userID).set(user);
+                            NavController navController = Navigation.findNavController(getActivity(), R.id.nav_host_fragment_activity_main);
+                            navController.navigate(R.id.navigation_login);
                             authSuccess = true;
                         } else {
                             // If sign in fails, display a message to the user.
@@ -178,22 +185,14 @@ public class CreateAccountFragment extends Fragment{
                     }
                 });
 
-        FirebaseUser currentUser = mAuth.getCurrentUser();
-        String userID = "test";
-        if (currentUser != null) {
-            userID = currentUser.getUid();
+        /*FirebaseUser currentUser = mAuth.getCurrentUser();
+        String userID = currentUser.getUid();
             // Now you have the userID, you can use it as needed
-            Log.d("UserID", "User ID: " + userID);
-            CollectionReference dbUsers = db.collection("Users");
-            dbUsers.document(currentUser.getUid()).set(user);
-            NavController navController = Navigation.findNavController(getActivity(), R.id.nav_host_fragment_activity_main);
-            navController.navigate(R.id.navigation_login);
-        } else {
-            // No user is signed in
-            Log.d("UserID", "No user signed in");
-            Toast.makeText(getActivity(), "No user signed in",
-                    Toast.LENGTH_SHORT).show();
-        }
+        Log.d("UserID", "User ID: " + userID);
+        CollectionReference dbUsers = db.collection("Users");
+        dbUsers.document(userID).set(user);
+        NavController navController = Navigation.findNavController(getActivity(), R.id.nav_host_fragment_activity_main);
+        navController.navigate(R.id.navigation_login);*/
 
         /* dbUsers.add(user).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
             @Override
