@@ -87,8 +87,8 @@ public class LoginFragment extends Fragment {
                                 SharedPreferences.Editor editor = sharedPref.edit();
                                 editor.putInt("is_logged_in", 1);
                                 editor.apply();
-                                Toast.makeText(getActivity(), user.getUid(),
-                                        Toast.LENGTH_SHORT).show();
+                                //Toast.makeText(getActivity(), user.getUid(),
+                                  //      Toast.LENGTH_SHORT).show();
                                 // Proceed to main activity or desired destination
                                 NavController navController = Navigation.findNavController(getActivity(), R.id.nav_host_fragment_activity_main);
                                 Activity activity = getActivity();
