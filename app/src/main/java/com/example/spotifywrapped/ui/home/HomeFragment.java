@@ -202,27 +202,6 @@ public class HomeFragment extends Fragment {
         AuthorizationClient.openLoginActivity(getActivity(), AUTH_CODE_REQUEST_CODE, request);
     }
 
-
-    /**
-     * When the app leaves this activity to momentarily get a token/code, this function
-     * fetches the result of that external activity to get the response from Spotify
-     */
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        final AuthorizationResponse response = AuthorizationClient.getResponse(resultCode, data);
-
-        // Check which request code is present (if any)
-        if (AUTH_TOKEN_REQUEST_CODE == requestCode) {
-            mAccessToken = response.getAccessToken();
-            //setTextAsync(mAccessToken, tokenTextView);
-
-        } else if (AUTH_CODE_REQUEST_CODE == requestCode) {
-            mAccessCode = response.getCode();
-            //setTextAsync(mAccessCode, codeTextView);
-        }
-    }
-
     /**
      * Get user profile
      * This method will get the user profile using the token
@@ -271,7 +250,7 @@ public class HomeFragment extends Fragment {
                         // Loop through the items and extract artist names
                         int count = Math.min(itemsArray.length(), 3);
                         StringBuilder topArtists = new StringBuilder();
-                        topArtists.append("Top Artists\n");
+                        topArtists.append("Top Artists\n\n");
                         for (int i = 0; i < count; i++) {
                             JSONObject artistObject = itemsArray.getJSONObject(i);
                             String artistName = artistObject.getString("name");
@@ -311,7 +290,7 @@ public class HomeFragment extends Fragment {
                                         // Loop through the items and extract track names
                                         int count = Math.min(itemsArray.length(), 3);
                                         StringBuilder topTracks = new StringBuilder();
-                                        topTracks.append("Recommended Artists\n");
+                                        topTracks.append("Recommended Artists\n\n");
                                         for (int i = 0; i < count; i++) {
                                             JSONObject trackObject = itemsArray.getJSONObject(i);
                                             String trackName = trackObject.getString("name");
@@ -372,7 +351,7 @@ public class HomeFragment extends Fragment {
                         // Loop through the items and extract track names
                         int count = Math.min(itemsArray.length(), 3);
                         StringBuilder topTracks = new StringBuilder();
-                        topTracks.append("Top Tracks\n");
+                        topTracks.append("Top Tracks\n\n");
                         for (int i = 0; i < count; i++) {
                             JSONObject trackObject = itemsArray.getJSONObject(i);
                             String trackName = trackObject.getString("name");

@@ -3,6 +3,7 @@ import android.app.ActionBar;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -119,10 +120,16 @@ public class CreateAccountFragment extends Fragment{
                     onGetUserProfileClicked();
                     counter = 0;
                 }*/
-                //Toast.makeText(requireContext(), mAccessToken, Toast.LENGTH_SHORT).show();
+
                 getToken();
                 /*getCode();
                 onGetUserProfileClicked();*/
+                //SystemClock.sleep(1000);
+                mAccessToken = ((MainActivity) requireActivity()).getmAccessToken();
+                //mAccessCode = ((MainActivity) requireActivity()).getmAccessCode();
+
+                //Toast.makeText(requireContext(), mAccessToken, Toast.LENGTH_SHORT).show();
+
                 isSpotifyLinked = true;
             }
         });
@@ -131,6 +138,7 @@ public class CreateAccountFragment extends Fragment{
             @Override
             public void onClick(View v) {
                 if (isSpotifyLinked) {
+                    mAccessToken = ((MainActivity) requireActivity()).getmAccessToken();
                     createAccount();
                 } else {
                     Toast.makeText(requireContext(), "Please link your Spotify account first", Toast.LENGTH_SHORT).show();
@@ -160,7 +168,14 @@ public class CreateAccountFragment extends Fragment{
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
-                            FirebaseUser currentUser = mAuth.getCurrentUser();
+                            FirebaseUser currentUser = task.getResult().getUser();
+                            String userID = currentUser.getUid();
+                            // Now you have the userID, you can use it as needed
+                            Log.d("UserID", "User ID: " + userID);
+                            CollectionReference dbUsers = db.collection("Users");
+                            dbUsers.document(userID).set(user);
+                            NavController navController = Navigation.findNavController(getActivity(), R.id.nav_host_fragment_activity_main);
+                            navController.navigate(R.id.navigation_login);
                             authSuccess = true;
                         } else {
                             // If sign in fails, display a message to the user.
@@ -170,22 +185,15 @@ public class CreateAccountFragment extends Fragment{
                     }
                 });
 
-        FirebaseUser currentUser = mAuth.getCurrentUser();
-        String userID = "test";
-        if (currentUser != null) {
-            userID = currentUser.getUid();
+        /*FirebaseUser currentUser = mAuth.getCurrentUser();
+        String userID = currentUser.getUid();
             // Now you have the userID, you can use it as needed
-            Log.d("UserID", "User ID: " + userID);
-            NavController navController = Navigation.findNavController(getActivity(), R.id.nav_host_fragment_activity_main);
-            navController.navigate(R.id.navigation_login);
-        } else {
-            // No user is signed in
-            Log.d("UserID", "No user signed in");
-            Toast.makeText(getActivity(), "No user signed in",
-                    Toast.LENGTH_SHORT).show();
-        }
+        Log.d("UserID", "User ID: " + userID);
         CollectionReference dbUsers = db.collection("Users");
-        dbUsers.document(currentUser.getUid()).set(user);
+        dbUsers.document(userID).set(user);
+        NavController navController = Navigation.findNavController(getActivity(), R.id.nav_host_fragment_activity_main);
+        navController.navigate(R.id.navigation_login);*/
+
         /* dbUsers.add(user).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
             @Override
             public void onSuccess(DocumentReference documentReference) {
@@ -247,10 +255,12 @@ public class CreateAccountFragment extends Fragment{
         // Check which request code is present (if any)
         if (AUTH_TOKEN_REQUEST_CODE == requestCode) {
             mAccessToken = response.getAccessToken();
+            Toast.makeText(requireContext(), mAccessToken, Toast.LENGTH_LONG);
             //setTextAsync(mAccessToken, tokenTextView);
 
         } else if (AUTH_CODE_REQUEST_CODE == requestCode) {
             mAccessCode = response.getCode();
+            Toast.makeText(requireContext(), mAccessCode, Toast.LENGTH_LONG);
             //setTextAsync(mAccessCode, codeTextView);
         }
     }
